@@ -6,7 +6,9 @@ import {
     signInWithPopup,
     signInWithRedirect,
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
 } from 'firebase/auth';
 
 import {
@@ -76,3 +78,7 @@ export const singInAuthUserWithEmailAndPassword = (email, password) => {
 
     return signInWithEmailAndPassword(auth, email, password)
 }
+
+export const singOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
