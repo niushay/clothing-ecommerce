@@ -1,4 +1,3 @@
-import { paste } from '@testing-library/user-event/dist/paste';
 import { initializeApp } from 'firebase/app';
 import {
     getAuth,
@@ -15,7 +14,11 @@ import {
     getFirestore,
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    collection,
+    writeBatch,
+    query,
+    getDocs
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -39,6 +42,37 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider); //Google + Redirect
 
 const db = getFirestore();
+
+//insert documnet to collection
+export const addCollectionAndDocuments = async (collcetionKey, objectsToAdd) => {
+    //collectionKey is a name of collection like 'users'
+    const collectionRef = collection(db, collcetionKey);
+    const batch = writeBatch(db);
+
+    objectsToAdd.forEach(object => {
+        // object.title.toLowerCase() is our key of document
+        const docRef = doc(collectionRef, object.title.toLowerCase());
+        batch.set(docRef, object)
+    });
+
+    await batch.commit()
+    console.log('done');
+}
+
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+        const { title, items } = docSnapshot.data();
+        acc[title.toLowerCase()] = items
+        return acc;
+    }, {})
+    return categoryMap;
+}
+
 
 //Create User in Database
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
