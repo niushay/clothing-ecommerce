@@ -7,7 +7,7 @@ import {
 
 
 import FormInput from "../form-input/form-input.components";
-import Button from "../button/button.components";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.components";
 
 import './sign-in-form.styles.scss'
 
@@ -82,9 +82,9 @@ const SignInForm = () => {
                     onChange={handleChange}
                 />
                 <div className="buttons-container">
-                    <Button type='submit'>Sign In</Button>
+                    <Button buttonType={BUTTON_TYPE_CLASSES.base} type='submit'>Sign In</Button>
 
-                    <Button type='button' buttonType='google' onClick={signInWithGoogle}>
+                    <Button type='button' buttonType={BUTTON_TYPE_CLASSES.google} onClick={signInWithGoogle}>
                         Google sign in
                     </Button>
                 </div>
